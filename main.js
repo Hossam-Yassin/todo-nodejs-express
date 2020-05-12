@@ -1,9 +1,7 @@
 const express = require('express')
 const app = express()
 
-app.get('/', function(req, res) {
-    res.send("Home Page")
-});
+var routes = require('./routes')(app);
 
 console.log("TODO App has been initiated");
 app.listen(81);
