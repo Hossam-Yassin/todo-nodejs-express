@@ -6,7 +6,7 @@ const fs = require("fs");
 //Logger Filter/MiddleWare
 let LoggerFilter = (req, res, next) => { 
     
-    let url = req.url;
+    let url = req.originalUrl;
     let method = req.method;
     let status = res.statusCode;
     let time = Date(Date.now()).toString();
@@ -16,7 +16,7 @@ let LoggerFilter = (req, res, next) => {
      *  it should be managed in a configuration way so no hard code check 
      * **/
     if(url==='/todoapp/api/health'){
-        console.log(url);
+        console.log('Excluding the URL from the Logger filter  : ' + url);
         next(); //Check if you could skip the entire chain of middlewar/filters and call diretly the end point 
     }else{
         var logStatement = { 'time':time  , url ,method , status };
@@ -38,23 +38,27 @@ let securityFilter = (req, res, next) => {
      * Exclude the LoggerFilter if the URL is , this is not the best practice here ,
      *  it should be managed in a configuration way so no hard code check 
      * **/
-    let url = req.url;
-    if(url==='/todoapp/api/health'){
-        console.log(url);
+    var fullUrl = req.originalUrl;
+    if(fullUrl==='/todoapp/api/health'){
+        console.log('Excluding the URL from the security filter  : ' + fullUrl);
         next(); //Check if you could skip the entire chain of middlewar/filters and call diretly the end point 
+    }else{
+        var GateWay_API_Header = req.headers['x-gateway-apikey'];
+        var Cross_Site_Request_Forgery_Header = req.headers['csrf-token'];
+        if(GateWay_API_Header && Cross_Site_Request_Forgery_Header){
+            if(GateWay_API_Header=='ConfiguredValue'){
+                console.log('Security Filter Header checked passed ');
+                next();
+            }else{
+                console.log('Security Filter Header checked failed due to mismatch API-TOken ');
+                res.status(403).send('Forbidden Response');
+            }
+            
+        }else{
+            console.log('Security Filter Header checked failed due to missing Api and/or CSRF token ');
+            res.status(403).send('Forbidden Response');
+        }
     }
-
-    var GateWay_API_Header = req.headers['x-Gateway-ApiKey'];
-    var Cross_Site_Request_Forgery_Header = req.headers['csrf-token'];
-    console.log(JSON.stringify(GateWay_API_Header));
-    console.log(JSON.stringify(Cross_Site_Request_Forgery_Header));
-    next();
-    // if(GateWay_API_Header!=='Fixed Guide' || Cross_Site_Request_Forgery_Header)
-    //     ;
-    // else    
-    //     
-    // }    
-
   };
 
 module.exports = function(app) {   
