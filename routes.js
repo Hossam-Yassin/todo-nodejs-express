@@ -1,6 +1,7 @@
 /**
+ * 
  * This is a route component that handle all routes inside the app , 
- * it will be broken down into smaller component later under a route pacakge
+ * @TODO : it will be broken down into smaller components later under a route pacakge
 **/
 const TODOs_EndPoint = "/todoapp/api/todos";
 const TODO_EndPoint = "/todoapp/api/todo";
@@ -15,7 +16,12 @@ module.exports = function(app) {
     });
 
     app.get(TODOs_EndPoint, function(req, res) {
-        res.send("Place holder for getting all todos ");
+        //Mock Data that retrieved from a store (DB or any model provider)
+        var todos = {
+            'ID1':'Mocked Completed NodeJS Thread Model' ,
+            'ID2':'Mocked Complete overview of Component based design by ReactJS' ,
+            'ID3':'Mocked complete POC of Redux (Action , Action creator and Reducer' } ;
+        res.json(todos);
     });
 
     app.get(TODO_EndPoint, function(req, res) {
