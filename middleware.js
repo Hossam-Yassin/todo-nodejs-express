@@ -2,6 +2,7 @@
 
 const express = require("express");
 const fs = require("fs");
+var cors = require('cors');
 
 //Logger Filter/MiddleWare
 let LoggerFilter = (req, res, next) => { 
@@ -39,13 +40,16 @@ let securityFilter = (req, res, next) => {
      *  it should be managed in a configuration way so no hard code check 
      * **/
     var fullUrl = req.originalUrl;
-    if(fullUrl==='/todoapp/api/health'){
+    let method = req.method;
+
+    if(fullUrl==='/todoapp/api/health'  || method==='OPTIONS'){
         console.log('Excluding the URL from the security filter  : ' + fullUrl);
         next(); //Check if you could skip the entire chain of middlewar/filters and call diretly the end point 
     }else{
         var GateWay_API_Header = req.headers['x-gateway-apikey'];
         var Cross_Site_Request_Forgery_Header = req.headers['csrf-token'];
-        if(GateWay_API_Header && Cross_Site_Request_Forgery_Header){
+        console.log(GateWay_API_Header  + ' && ' + Cross_Site_Request_Forgery_Header);
+        if(GateWay_API_Header && Cross_Site_Request_Forgery_Header){ 
             if(GateWay_API_Header=='ConfiguredValue'){
                 console.log('Security Filter Header checked passed ');
                 next();
@@ -61,7 +65,8 @@ let securityFilter = (req, res, next) => {
     }
   };
 
-module.exports = function(app) {   
+module.exports = function(app) {  
+    app.use(cors());
     app.use(LoggerFilter);
     app.use(securityFilter);
 }

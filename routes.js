@@ -8,6 +8,8 @@ const TODO_EndPoint = "/todoapp/api/todo";
 const HEALTH_EndPoint = "/todoapp/api/health";
 const HOME_EndPoint = "/";
 
+var cors = require('cors');
+
 module.exports = function(app) {
     
     //Here is the entry point where you start the navigation
@@ -15,12 +17,17 @@ module.exports = function(app) {
         res.send("Home Page")
     });
 
-    app.get(TODOs_EndPoint, function(req, res) {
+    app.options(TODOs_EndPoint, cors());
+    app.get(TODOs_EndPoint, cors() , function(req, res) {
         //Mock Data that retrieved from a store (DB or any model provider)
         var todos = {
-            'ID1':'Mocked Completed NodeJS Thread Model' ,
-            'ID2':'Mocked Complete overview of Component based design by ReactJS' ,
-            'ID3':'Mocked complete POC of Redux (Action , Action creator and Reducer' } ;
+            "todos" : [
+                {"ID":'1' , "Description" : "Mocked Complete overview of NodeJS Event Loop" , "Status":"Complete"} ,
+                {"ID":"2" , "Description" : "Mocked Complete overview of Component based design by ReactJS" , "Status":"Complete"} ,
+                {"ID":'3' , "Description" : "Mocked complete POC of Redux (Action , Action creator and Reducer" , "Status":"New"}
+                ]
+            };
+        console.log(todos);
         res.json(todos);
     });
 
