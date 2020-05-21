@@ -1,0 +1,19 @@
+{
+  "name": "todo-nodejs-express",
+  "version": "1.0.0",
+  "description": "TODO API for Adding , Deleting and Getting TOODs model",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Hossam-Yassin/todo-nodejs-express.git"
+  },
+  "author": "Hossam Yassin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Hossam-Yassin/todo-nodejs-express/issues"
+  },
+  "homepage": "https://github.com/Hossam-Yassin/todo-nodejs-express#readme"
+}
