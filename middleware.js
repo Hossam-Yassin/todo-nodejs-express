@@ -10,7 +10,6 @@ let LoggerFilter = (req, res, next) => {
     
     let url = req.originalUrl;
     let method = req.method;
-    let status = res.statusCode;
     let time = Date(Date.now()).toString();
     
     /**
@@ -20,16 +19,15 @@ let LoggerFilter = (req, res, next) => {
     if(url==='/todoapp/api/health'){
         console.log('Excluding the URL from the Logger filter  : ' + url);
         next(); //Check if you could skip the entire chain of middlewar/filters and call diretly the end point 
-    }else{
-        var logStatement = { 'time':time  , url ,method , status };
-        console.log(JSON.stringify(logStatement))
-    
-         fs.appendFile("TODO_logs.txt", JSON.stringify(logStatement) + "\n", err => {
-             if (err) {
-             console.log(err);
-            }
-        });
+    }else{         
         next();
+        var status = res.statusCode;
+        var logStatement = { 'time':time  , url ,method , status };
+        fs.appendFile("TODO_logs.txt", JSON.stringify(logStatement) + "\n", err => {
+            if (err) {
+                //log the error 
+           }
+       });   
     }
   };
 
@@ -72,6 +70,6 @@ module.exports = function(app) {
     app.use(bodyParser.urlencoded({ extended: true }));
     app.use(bodyParser.json());
 
-    app.use(LoggerFilter);
     app.use(securityFilter);
+    app.use(LoggerFilter);
 }
