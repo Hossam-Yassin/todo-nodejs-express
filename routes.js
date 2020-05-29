@@ -34,6 +34,7 @@ module.exports = function(app) {
 
         const item = new TODOItem(++todos_Size ,JSON.parse(payload).description , "New");
         todos_Map.set(todos_Size.toString() , item);
+        res.setHeader('id', todos_Size);
         res.sendStatus(204); 
     });
 
