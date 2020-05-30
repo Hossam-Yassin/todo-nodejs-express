@@ -35,7 +35,11 @@ module.exports = function(app) {
         const item = new TODOItem(++todos_Size ,JSON.parse(payload).description , "New");
         todos_Map.set(todos_Size.toString() , item);
         res.setHeader('id', todos_Size);
-        res.sendStatus(204); 
+        var location = req.protocol + "://" + req.headers.host + req.originalUrl+todos_Size+'/';
+        res.setHeader('Location', location);
+
+        res.setHeader('access-control-expose-headers', 'id , Location');
+        res.sendStatus(201); 
     });
 
     app.delete(TODO_Details_EndPoint, function(req, res) {
@@ -72,7 +76,7 @@ module.exports = function(app) {
                 const item = new TODOItem( todo.id ,todo.description, JSON.parse(payload).status);
                 todos_Map.delete(req.params.id);
                 todos_Map.set(todo.id.toString(), item); //Update the item with the new status
-                res.sendStatus(204); //Successfully updated
+                res.sendStatus(200); //Successfully updated
             }
         }
     });

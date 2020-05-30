@@ -32,7 +32,7 @@ let LoggerFilter = (req, res, next) => {
   };
 
 
-  //Logger Filter/MiddleWare
+//Security Filter/MiddleWare
 let securityFilter = (req, res, next) => { 
     /**
      * Exclude the LoggerFilter if the URL is , this is not the best practice here ,
